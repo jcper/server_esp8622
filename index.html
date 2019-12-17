@@ -1,0 +1,48 @@
+<html>
+<head>
+ <title>Websockets Arduino</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script>
+      let HOST = location.origin.replace(/^http/, 'ws')
+      let ws = new WebSocket(HOST);
+      let el;
+	  let boton_activar;
+	  let boton_desactivar;
+	  var estado;
+      ws.onmessage = (event) => {
+        el = document.getElementById('led_estado');
+       
+		estado=event.data;
+		 if(estado=='LED:A'){
+		 el.innerHTML = 'LED: ACTIVADO ';
+		 boton_activar= document.getElementById('activar_led').disabled=true;
+		 boton_desactivar= document.getElementById('desactivar_led').disabled=false;
+		 }else{
+		   el.innerHTML = 'LED: DESACTIVADO ';
+		  boton_desactivar= document.getElementById('desactivar_led').disabled=true;
+		  boton_activar= document.getElementById('activar_led').disabled=false;
+		 }
+      };
+	 
+	  function activarLed(){
+	  console.log("activar");
+	  ws.send('LED:A');
+	  }
+	  function desactivarLed(){
+	  ws.send('LED:D');
+	  }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+  <h2>WEBSOCKETS ESP8266-01S</h2>
+   <h3 id="led_estado"></h3>
+  <button type="button" class="btn btn-success" id="activar_led" onclick="activarLed()">ACTIVAR</button>
+  <button type="button" class="btn btn-danger" id="desactivar_led"onclick="desactivarLed()">DESACTIVAR</button>
+    </div>
+  </body>
+</html>
